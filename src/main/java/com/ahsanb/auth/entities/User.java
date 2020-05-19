@@ -36,10 +36,11 @@ import lombok.Data;
 public class User {
 	public User() {}
 
-	public User(String username, String email, String password) {
+	public User(String username, String password, String email, Set<Role> roles) {
 		this.username = username;
-		this.email = email;
 		this.password = password;
+		this.email = email;
+		this.roles = roles;
 	}
 	
 	@Id
@@ -70,7 +71,7 @@ public class User {
     private Date dateAdded = new Date();
 
     @NotNull(message = "Roles cannot be null")
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(	name = "user_roles", 
 				joinColumns = @JoinColumn(name = "user_id"), 
 				inverseJoinColumns = @JoinColumn(name = "role_id"))

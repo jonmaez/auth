@@ -32,7 +32,7 @@ public class JwtUtils {
 					.map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
 				.setIssuedAt(new Date())
 				.setExpiration(new Date((new Date()).getTime() + expiration * 1000))
-				.signWith(SignatureAlgorithm.HS512, secret)
+				.signWith(SignatureAlgorithm.HS512, secret.getBytes())
 				.compact();
 	}
 }
