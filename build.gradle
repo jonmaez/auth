@@ -1,0 +1,141 @@
+buildscript {
+    ext {
+        springBootVersion = '2.2.7.RELEASE'
+        springCloudVersion = 'Hoxton.RELEASE'    
+        project.version = '0.0.1'
+    	jarname = 'auth'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+plugins {
+  	id "com.palantir.docker" version "0.20.1"
+	id 'org.springframework.boot' version '2.1.13.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'jacoco'
+	id 'java'
+  	id 'org.hidetake.swagger.generator' version '2.16.0'
+}
+
+group = 'com.ahsanb'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+	
+	// Following is due a bug https://github.com/springfox/springfox/issues/3052
+	jcenter()
+	maven { url "http://oss.jfrog.org/artifactory/oss-snapshot-local" }
+}
+
+bootJar {
+    baseName = jarname
+    version = project.version
+}
+
+ext {
+	set('springCloudVersion', "Hoxton.RELEASE")
+    set('swaggerOutputDir', file("${buildDir}/swagger"))
+    set('swaggerFile', file("${buildDir}/swagger/swagger.json"))
+    set('sdkOutputDir', file("${buildDir}/swagger-code"))
+}
+
+ext['junit-jupiter.version'] = '5.4.2'
+
+dependencies {
+    implementation 'org.modelmapper:modelmapper:2.3.3'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	
+	// Pointing swagger to SNAPSHOT version due to: https://github.com/springfox/springfox/issues/3052
+    implementation 'io.springfox:springfox-swagger2:3.0.0-SNAPSHOT'
+    implementation 'io.springfox:springfox-swagger-ui:3.0.0-SNAPSHOT'
+    implementation 'io.springfox:springfox-data-rest:3.0.0-SNAPSHOT'
+    	
+	testCompile "org.junit.jupiter:junit-jupiter-params:5.1.0"
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'com.h2database:h2'
+	annotationProcessor 'org.projectlombok:lombok'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'junit', module: 'junit' // exclude JUnit 4
+    }
+    
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.4.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.2'
+    testCompile group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.2.0'
+    swaggerCodegen 'io.swagger:swagger-codegen-cli:2.3.1'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+task renameArtifacts (type: Copy) {
+    dependsOn bootJar
+    finalizedBy jacocoTestReport
+    from ('build/libs')
+    include "${jarname}-${version}.jar"
+    destinationDir file('build/libs/')
+    rename "${jarname}-${version}.jar", "service.jar"
+}
+
+docker {
+    name "$jarname"+":$version"
+    dockerfile file('Dockerfile')
+    files bootJar
+    copySpec.into("build/libs")
+    buildArgs([JAR_FILE: "build/libs/$jarname-$version"+".jar"])
+}
+
+docker.dependsOn renameArtifacts
+
+test {
+    systemProperty 'io.springfox.staticdocs.outputDir', swaggerOutputDir
+    systemProperty "spring.config.location", "classpath:/"
+    useJUnitPlatform() 
+}
+
+swaggerSources {
+    inventoryManagement {
+        inputFile = swaggerFile
+        code {
+            outputDir = sdkOutputDir
+            language = 'cpprest'
+        }
+    }
+}
+
+resolveSwaggerTemplate.dependsOn test
+
+jacocoTestReport {
+	dependsOn test
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.enabled true
+    }
+}
