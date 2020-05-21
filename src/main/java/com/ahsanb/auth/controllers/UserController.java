@@ -39,7 +39,7 @@ public class UserController {
 		return userService.addUserInfo(userInfo);
 	}
     
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "List All Users", response = ListUserResponse.class)
 	public @ResponseBody ListUserResponse getUsers() {

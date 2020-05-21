@@ -13,8 +13,9 @@ import javax.validation.constraints.Size;
 
 import com.ahsanb.auth.entities.enums.RoleType;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -61,19 +62,18 @@ public class UserInfo {
     
 	@Valid
     @ApiModelProperty(value = "Password for user")
-	@JsonProperty
+	@JsonProperty(access = Access.WRITE_ONLY)
     @NotNull(message = "Password cannot be null")
     @NotBlank(message = "Password cannot be empty")
     @Size(min = 1, max = 140)
 	private String password;
     
 	@Valid
-    @ApiModelProperty(value = "Date Item was added")
-    @JsonProperty
+    @ApiModelProperty(value = "Date user was added")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") 
     @NotNull
     private Date dateAdded = new Date();
-	
+		
     @Override
     public String toString() {
         return "User [id=" + id + ", username=" + username + ", email=" + email + ", roles=" + roles + ", dateAdded=" + dateAdded + "]";
