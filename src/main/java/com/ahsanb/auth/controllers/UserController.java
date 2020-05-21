@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,24 +32,28 @@ public class UserController {
 	@Autowired
 	UserService userService;
 
+	@PreAuthorize("hasRole('admin')")
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Create a user", response = UserInfo.class)
 	public @ResponseBody UserInfo addUser(@Valid @RequestBody final UserInfo userInfo) throws RoleNotFoundException, UserException {
 		return userService.addUserInfo(userInfo);
 	}
     
+	@PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "List All Users", response = ListUserResponse.class)
 	public @ResponseBody ListUserResponse getUsers() {
 		return userService.getAllUserInfos();
 	}
     
+	@PreAuthorize("hasRole('admin')")
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Describe a User", response = UserInfo.class)
     public @ResponseBody UserInfo getUser(@PathVariable final Long id) throws UserNotFoundException {
         return userService.getUserInfoById(id);
     }
     
+	@PreAuthorize("hasRole('admin')")
     @PostMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Update a User by ID", response = UserInfo.class)
     public @ResponseBody UserInfo updateDepartment(
@@ -56,6 +61,7 @@ public class UserController {
         return userService.updateUserInfo(userInfo, id);
     }
     
+	@PreAuthorize("hasRole('admin')")
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Delete an User by ID", response = UserInfo.class)
     public @ResponseBody ResponseEntity<String> deleteUser( @PathVariable final Long id) {

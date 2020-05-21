@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 import com.ahsanb.auth.dto.LoginRequest;
 import com.ahsanb.auth.dto.LoginResponse;
 import com.ahsanb.auth.exceptions.InvalidCredentialsException;
+import com.ahsanb.auth.security.jwt.JwtUtils;
 import com.ahsanb.auth.security.services.UserDetailsImpl;
-import com.ahsanb.auth.util.JwtUtils;
 
 @Service("authService")
 public class AuthServiceImpl implements AuthService {

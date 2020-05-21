@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -69,10 +70,17 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(e.getStatus()).body(getErrorResponse(e.getReason()));
     }
 
+    @ExceptionHandler(value = AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorMessage handleAccessDeniedException(Exception ex) {
+        logger.debug("Access Denied Exception", ex);
+	    return getErrorResponse(ex.getMessage());
+    }
+    
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorMessage handleInternalException(Exception ex) {
-        logger.error("Internal Server Error", ex);
+        logger.debug("Internal Server Error", ex);
         return getErrorResponse("Internal Server Error");
     }
 
