@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum RoleType {
 	ROLE_USER("user"),
-    ROLE_MODERATOR("mod"),
+    ROLE_MODERATOR("moderator"),
     ROLE_ADMIN("admin");
     
     private String roleName;
