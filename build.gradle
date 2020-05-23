@@ -62,7 +62,7 @@ ext {
 ext['junit-jupiter.version'] = '5.4.2'
 
 dependencies { 
-    implementation files('common-utils-0.0.1-SNAPSHOT.jar')
+    implementation files('libs/common-utils-0.0.1-SNAPSHOT.jar')
     implementation 'org.modelmapper:modelmapper:2.3.3'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
