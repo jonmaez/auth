@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ import com.ahsanb.auth.entities.User;
 import com.ahsanb.auth.entities.enums.RoleType;
 
 @Component
+@ConditionalOnProperty(value = "users.initializer.enabled", havingValue = "true", matchIfMissing = false)
 public class UserInitializer  implements CommandLineRunner {
 	
 	@Autowired
