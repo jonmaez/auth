@@ -26,10 +26,10 @@ import lombok.Data;
 public class UserInfo {
 	public UserInfo() {}
 
-	public UserInfo(String username, String email, String password) {
+	public UserInfo(String username, String password, String email) {
 		this.username = username;
-		this.email = email;
 		this.password = password;
+		this.email = email;
 	}
 	
     @ApiModelProperty(value = "Unique ID of the User")
@@ -50,7 +50,7 @@ public class UserInfo {
     @NotNull(message = "E-mail cannot be null")
     @NotBlank(message = "E-mail cannot be empty")
     @Size(min = 1, max = 50)
-	@Email
+	@Email(message = "E-mail must be valid")
 	private String email;
 
 	@Valid
@@ -64,7 +64,7 @@ public class UserInfo {
 	@JsonProperty(access = Access.WRITE_ONLY)
     @NotNull(message = "Password cannot be null")
     @NotBlank(message = "Password cannot be empty")
-    @Size(min = 1, max = 140)
+    @Size(min = 1, max = 50)
 	private String password;
     
 	@Valid

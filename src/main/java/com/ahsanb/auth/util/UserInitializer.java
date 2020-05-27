@@ -42,7 +42,7 @@ public class UserInitializer  implements CommandLineRunner {
                 
 		roleRepository.findAll().forEach(System.out::println);
 		
-        Stream.of(new User("admin", encoder.encode("admin123"), "admin@ahsanb.com", new HashSet<Role>(Arrays.asList(roles.get(0)))), 
+        Stream.of(new User("admin", encoder.encode("admin123"), "admin@ahsanb.com", new HashSet<Role>(Arrays.asList(roles.get(0)))),
         		  new User("moderator", encoder.encode("mod123"), "mod@ahsanb.com", new HashSet<Role>(Arrays.asList(roles.get(1)))), 
         		  new User("user", encoder.encode("user123"), "user@ahsanb.com", new HashSet<Role>(Arrays.asList(roles.get(2)))))
         	  .forEach(user -> userRepository.save(user));

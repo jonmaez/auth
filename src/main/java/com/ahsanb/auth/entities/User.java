@@ -58,12 +58,11 @@ public class User {
     @Column(unique = true)
     @NotBlank(message = "E-mail cannot be empty")
     @Size(min = 1, max = 50)
-	@Email
+	@Email(message = "E-mail must be valid")
 	private String email;
 
     @NotNull(message = "Password cannot be null")
     @NotBlank(message = "Password cannot be empty")
-    //@Size(max = 40)
 	private String password;
     
     @NotNull
