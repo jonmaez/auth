@@ -19,7 +19,7 @@ import com.ahsanb.auth.entities.enums.RoleType;
 
 @Component
 @ConditionalOnProperty(value = "users.initializer.enabled", havingValue = "true", matchIfMissing = false)
-public class UserInitializer  implements CommandLineRunner {
+public class UserInitializer implements CommandLineRunner {
 	
 	@Autowired
 	PasswordEncoder encoder;

@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
 			}
 		
 		if (userRepository.existsByEmail(userInfo.getEmail())) {
-            throw new UserException(String.format("Email [%s] already in use", userInfo.getEmail()));
+            throw new UserException(String.format("E-mail [%s] already in use", userInfo.getEmail()));
 		}
 
 		// username can only be set on creation of user. Cannot be modified later.
