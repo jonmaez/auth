@@ -34,7 +34,7 @@ import com.ahsanb.auth.util.JsonUtil;
 public class UserControllerTest {
 	
 	private static final String ROOT_URI = "/users";
-	private static final Long VALID_ITEM_ID = Long.valueOf(11);
+	private static final Long VALID_USER_ID = Long.valueOf(11);
 	
     @Autowired
     private MockMvc mvc;
@@ -63,7 +63,7 @@ public class UserControllerTest {
     @Test
     public void whenValidUser_thenUpdateUser() throws Exception {
     	UserInfo existing = new UserInfo("user", "user123", "user@ahsanb.com");
-    	existing.setId(VALID_ITEM_ID);
+    	existing.setId(VALID_USER_ID);
     	
     	UserInfo toUpdate = new UserInfo("user", "user123", "user123@ahsanb.com");
         given(userService.updateUserInfo(toUpdate, existing.getId())).willReturn(toUpdate);
@@ -102,7 +102,7 @@ public class UserControllerTest {
     @Test
     public void whenExistingUser_thenGetUser() throws Exception {
         UserInfo existing = new UserInfo("user", "user", "user@ahsanb.com");
-    	existing.setId(VALID_ITEM_ID);
+    	existing.setId(VALID_USER_ID);
     	
         given(userService.getUserInfoById((existing.getId()))).willReturn(existing);       
 
@@ -118,7 +118,7 @@ public class UserControllerTest {
     @Test
     public void whenExistingUser_thenDeleteUser() throws Exception {
     	UserInfo existing = new UserInfo("user", "user", "user@ahsanb.com");
-        existing.setId(VALID_ITEM_ID);
+        existing.setId(VALID_USER_ID);
         
         mvc.perform(delete(ROOT_URI + "/" + existing.getId())
            .contentType(MediaType.APPLICATION_JSON))
