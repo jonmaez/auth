@@ -63,7 +63,7 @@ public class UserController {
     
 	@PreAuthorize("hasAuthority('admin')")
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Delete an User by ID", response = UserInfo.class)
+    @ApiOperation(value = "Delete an User by ID")
     public @ResponseBody ResponseEntity<String> deleteUser( @PathVariable final Long id) {
     	userService.deleteUser(id);
         return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
