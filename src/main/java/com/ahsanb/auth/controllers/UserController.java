@@ -23,6 +23,8 @@ import com.ahsanb.auth.exceptions.UserException;
 import com.ahsanb.auth.exceptions.UserNotFoundException;
 import com.ahsanb.auth.services.UserService;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -35,6 +37,9 @@ public class UserController {
 	@PreAuthorize("hasAuthority('admin')")
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Create a user", response = UserInfo.class)
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Authentication token", required = true, dataType = "string", paramType = "header") 
+    })
 	public @ResponseBody UserInfo addUser(@Valid @RequestBody final UserInfo userInfo) throws RoleNotFoundException, UserException {
 		return userService.addUserInfo(userInfo);
 	}
@@ -42,6 +47,9 @@ public class UserController {
 	@PreAuthorize("hasAuthority('admin')")
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "List All Users", response = ListUserResponse.class)
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Authentication token", required = true, dataType = "string", paramType = "header") 
+    })
 	public @ResponseBody ListUserResponse getUsers() {
 		return userService.getAllUserInfos();
 	}
@@ -49,6 +57,9 @@ public class UserController {
 	@PreAuthorize("hasAuthority('admin')")
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Describe a User", response = UserInfo.class)
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Authentication token", required = true, dataType = "string", paramType = "header") 
+    })
     public @ResponseBody UserInfo getUser(@PathVariable final Long id) throws UserNotFoundException {
         return userService.getUserInfoById(id);
     }
@@ -56,6 +67,9 @@ public class UserController {
 	@PreAuthorize("hasAuthority('admin')")
     @PostMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Update a User by ID", response = UserInfo.class)
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Authentication token", required = true, dataType = "string", paramType = "header") 
+    })
     public @ResponseBody UserInfo updateDepartment(
     		@Valid @RequestBody final UserInfo userInfo, @PathVariable final Long id) throws UserException {
         return userService.updateUserInfo(userInfo, id);
@@ -64,6 +78,9 @@ public class UserController {
 	@PreAuthorize("hasAuthority('admin')")
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Delete an User by ID")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Authentication token", required = true, dataType = "string", paramType = "header") 
+    })
     public @ResponseBody ResponseEntity<String> deleteUser( @PathVariable final Long id) {
     	userService.deleteUser(id);
         return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
