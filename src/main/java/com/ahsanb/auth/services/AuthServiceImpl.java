@@ -19,11 +19,12 @@ import com.ahsanb.auth.security.services.UserDetailsImpl;
 
 @Service("authService")
 public class AuthServiceImpl implements AuthService {
+	
 	@Autowired
-	AuthenticationManager authenticationManager;
+	private AuthenticationManager authenticationManager;
 
 	@Autowired
-	JwtUtils jwtUtils;
+	private JwtUtils jwtUtils;
 	
 	@Override
 	public LoginResponse authenticate(LoginRequest loginRequest) throws InvalidCredentialsException {
