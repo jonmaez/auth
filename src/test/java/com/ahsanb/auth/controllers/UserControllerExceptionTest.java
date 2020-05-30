@@ -1,6 +1,7 @@
 package com.ahsanb.auth.controllers;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -94,16 +95,19 @@ public class UserControllerExceptionTest {
     @Test
     public void testUserExceptionOnAdd() throws Exception {
     	UserInfo user = new UserInfo("user", "user123", "user@ahsanb.com");
-        given(userService.addUserInfo(user))
+        given(userService.addUserInfo(any(UserInfo.class)))
         						   .willThrow(new UserException(String.format("E-mail [%s] already in use", user.getEmail())));
+        
+        // Not deserializing from user object because "password" attribute is ignored
+        String payload = "{\"username\":\"user\",\"email\":\"user@ahsanb.com\",\"roles\":[\"user\"],\"password\":\"user123\"}";
         
         mvc.perform(post(ROOT_URI)
            .contentType(MediaType.APPLICATION_JSON)
-           .content(JsonUtil.asJsonString(user)))
+           .content(payload))
            .andExpect(status().isBadRequest())
            .andExpect(jsonPath("$.message", is(String.format("E-mail [%s] already in use", user.getEmail()))));
 
-        verify(userService, times(1)).addUserInfo(user);
+        verify(userService, times(1)).addUserInfo(any(UserInfo.class));
         verifyNoMoreInteractions(userService);
     }
     
@@ -153,36 +157,38 @@ public class UserControllerExceptionTest {
     public void testUserExceptionOnUpdate() throws Exception {
     	UserInfo existing = new UserInfo("user", "user123", "user@ahsanb.com");
     	existing.setId(VALID_USER_ID);
-    	
-    	UserInfo toUpdate = new UserInfo("user", "3456", "user@ahsanb.com");
-    	
-        given(userService.updateUserInfo(toUpdate, existing.getId()))
+    	   	
+        given(userService.updateUserInfo(any(UserInfo.class), any(Long.class)))
         						   .willThrow(new UserException(String.format("E-mail [%s] already in use", existing.getEmail())));
                    
+        // Not deserializing from object because "password" attribute is ignored
+        String payload = "{\"username\":\"user\",\"email\":\"user@ahsanb.com\",\"roles\":[\"user\"],\"password\":\"3456\"}";
+        
         mvc.perform(post(ROOT_URI + "/" + existing.getId())
            .contentType(MediaType.APPLICATION_JSON)
-           .content(JsonUtil.asJsonString(toUpdate)))
+           .content(payload))
            .andExpect(status().isBadRequest())
            .andExpect(jsonPath("$.message", is(String.format("E-mail [%s] already in use", existing.getEmail()))));
 
-        verify(userService, times(1)).updateUserInfo(toUpdate, existing.getId());
+        verify(userService, times(1)).updateUserInfo(any(UserInfo.class), any(Long.class));
         verifyNoMoreInteractions(userService);
     }
     
     @Test
-    public void testUserNotFoundExceptionOnUpdate() throws Exception {
-    	UserInfo toUpdate = new UserInfo("user", "user123", "user@ahsanb.com");
-    	
-        given(userService.updateUserInfo(toUpdate, INVALID_USER_ID))
+    public void testUserNotFoundExceptionOnUpdate() throws Exception {  	
+        given(userService.updateUserInfo(any(UserInfo.class), any(Long.class)))
         						   .willThrow(new UserNotFoundException(INVALID_USER_ID));
+        
+        // Not deserializing from newUser object because "password" attribute is ignored
+        String payload = "{\"username\":\"user\",\"email\":\"user@ahsanb.com\",\"roles\":[\"user\"],\"password\":\"user123\"}";
                    
         mvc.perform(post(ROOT_URI + "/" + INVALID_USER_ID)
            .contentType(MediaType.APPLICATION_JSON)
-           .content(JsonUtil.asJsonString(toUpdate)))
+           .content(payload))
            .andExpect(status().isNotFound())
            .andExpect(jsonPath("$.message", is(String.format("User not found with id: [%s]", INVALID_USER_ID))));
 
-        verify(userService, times(1)).updateUserInfo(toUpdate, INVALID_USER_ID);
+        verify(userService, times(1)).updateUserInfo(any(UserInfo.class), any(Long.class));
         verifyNoMoreInteractions(userService);
     }
     

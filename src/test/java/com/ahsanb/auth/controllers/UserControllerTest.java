@@ -2,6 +2,7 @@ package com.ahsanb.auth.controllers;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -27,7 +28,6 @@ import com.ahsanb.auth.dto.ListUserResponse;
 import com.ahsanb.auth.dto.UserInfo;
 import com.ahsanb.auth.security.services.UserDetailsServiceImpl;
 import com.ahsanb.auth.services.UserService;
-import com.ahsanb.auth.util.JsonUtil;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(UserController.class)
@@ -48,15 +48,18 @@ public class UserControllerTest {
     @Test
     public void whenValidAddUser_thenCreateUser() throws Exception {
     	UserInfo newUser = new UserInfo("user", "user123", "user@ahsanb.com");
-        given(userService.addUserInfo(newUser)).willReturn(newUser);
-
+        given(userService.addUserInfo(any(UserInfo.class))).willReturn(newUser);
+        
+        // Not deserializing from newUser object because "password" attribute is ignored
+        String payload = "{\"username\":\"user\",\"email\":\"user@ahsanb.com\",\"roles\":[\"user\"],\"password\":\"user123\"}";
+        
         mvc.perform(post(ROOT_URI)
            .contentType(MediaType.APPLICATION_JSON)
-           .content(JsonUtil.asJsonString(newUser)))
+           .content(payload))
            .andExpect(status().isOk())
            .andExpect(jsonPath("$.username", is(newUser.getUsername())));
         
-        verify(userService, times(1)).addUserInfo(newUser);
+        verify(userService, times(1)).addUserInfo(any(UserInfo.class));
         verifyNoMoreInteractions(userService);
     }
     
@@ -66,15 +69,18 @@ public class UserControllerTest {
     	existing.setId(VALID_USER_ID);
     	
     	UserInfo toUpdate = new UserInfo("user", "user123", "user123@ahsanb.com");
-        given(userService.updateUserInfo(toUpdate, existing.getId())).willReturn(toUpdate);
+        given(userService.updateUserInfo(any(UserInfo.class), any(Long.class))).willReturn(toUpdate);
+        
+        // Not deserializing from toUpdate object because "password" attribute is ignored
+        String payload = "{\"username\":\"user\",\"email\":\"user123@ahsanb.com\",\"roles\":[\"user\"],\"password\":\"user123\"}";
 
         mvc.perform(post(ROOT_URI + "/" + existing.getId())
            .contentType(MediaType.APPLICATION_JSON)
-           .content(JsonUtil.asJsonString(toUpdate)))
+           .content(payload))
            .andExpect(status().isOk())
            .andExpect(jsonPath("$.email", is(toUpdate.getEmail())));
         
-        verify(userService, times(1)).updateUserInfo(toUpdate, existing.getId());
+        verify(userService, times(1)).updateUserInfo(any(UserInfo.class), any(Long.class));
         verifyNoMoreInteractions(userService);
     }
     

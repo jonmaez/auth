@@ -13,8 +13,8 @@ import javax.validation.constraints.Size;
 
 import com.ahsanb.auth.entities.enums.RoleType;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -62,7 +62,7 @@ public class UserInfo {
     
 	@Valid
     @ApiModelProperty(value = "Password for user")
-	//@JsonProperty(access = Access.WRITE_ONLY)
+	@JsonProperty(access = Access.WRITE_ONLY)
     @NotNull(message = "Password cannot be null")
     @NotBlank(message = "Password cannot be empty")
     @Size(min = 1, max = 50)

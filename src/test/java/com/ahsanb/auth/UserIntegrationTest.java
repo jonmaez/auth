@@ -34,7 +34,6 @@ import com.ahsanb.auth.dto.UserInfo;
 import com.ahsanb.auth.entities.Role;
 import com.ahsanb.auth.entities.User;
 import com.ahsanb.auth.entities.enums.RoleType;
-import com.ahsanb.auth.util.JsonUtil;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -71,9 +70,12 @@ public class UserIntegrationTest {
     	createTestRole(RoleType.ROLE_USER);
     	UserInfo newUser = new UserInfo("user", "user123", "user@ahsanb.com");
 
+        // Not deserializing from newUser object because "password" attribute is ignored
+        String payload = "{\"username\":\"user\",\"email\":\"user@ahsanb.com\",\"roles\":[\"user\"],\"password\":\"user123\"}";
+        
         mvc.perform(post(ROOT_URI)
            .contentType(MediaType.APPLICATION_JSON)
-           .content(JsonUtil.asJsonString(newUser)))
+           .content(payload))
            .andExpect(status().isOk())
            .andExpect(jsonPath("$.username", is(newUser.getUsername())));
         
@@ -88,9 +90,12 @@ public class UserIntegrationTest {
     	
     	UserInfo toUpdate = new UserInfo("user", "user123", "user123@ahsanb.com");
 
+        // Not deserializing from toUpdate object because "password" attribute is ignored
+        String payload = "{\"username\":\"user\",\"email\":\"user123@ahsanb.com\",\"roles\":[\"user\"],\"password\":\"user123\"}";
+        
         mvc.perform(post(ROOT_URI + "/" + existing.getId())
            .contentType(MediaType.APPLICATION_JSON)
-           .content(JsonUtil.asJsonString(toUpdate)))
+           .content(payload))
            .andExpect(status().isOk())
            .andExpect(jsonPath("$.email", is(toUpdate.getEmail())));
     }
