@@ -17,6 +17,8 @@ import lombok.Data;
 @ApiModel(description = "Class representing a LoginRequest")
 public class LoginRequest {
 	
+	public LoginRequest() {}
+	
 	@Valid
     @ApiModelProperty(value = "Username of user")
 	@JsonProperty

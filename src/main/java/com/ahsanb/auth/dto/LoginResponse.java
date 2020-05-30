@@ -13,6 +13,15 @@ import lombok.Data;
 @AllArgsConstructor
 @ApiModel(description = "Class representing a LoginResponse")
 public class LoginResponse {
+	public LoginResponse() {}
+	
+	public LoginResponse(String accessToken, Long id, String username, String email, List<String> roles) {
+		this.token = accessToken;
+		this.id = id;
+		this.username = username;
+		this.email = email;
+		this.roles = roles;
+	}
 	
     @ApiModelProperty(value = "Unique ID of the User")
 	@JsonProperty
@@ -41,12 +50,4 @@ public class LoginResponse {
     @ApiModelProperty(value = "Token type")
 	@JsonProperty
 	private String type = "Bearer";
-	
-	public LoginResponse(String accessToken, Long id, String username, String email, List<String> roles) {
-		this.token = accessToken;
-		this.id = id;
-		this.username = username;
-		this.email = email;
-		this.roles = roles;
-	}
 }
