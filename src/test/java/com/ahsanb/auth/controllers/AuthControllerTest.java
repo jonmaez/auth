@@ -43,7 +43,7 @@ public class AuthControllerTest {
     
     @Test
     public void whenValidLoginRequest_thenSuccessfulLogIn() throws Exception {
-    	LoginRequest loginRequest = new LoginRequest("user", "user123");
+    	LoginRequest loginRequest = new LoginRequest(0, "user", "user123");
     	LoginResponse loginResponse = new LoginResponse("fake_token", 1L, "user", "user@ahsanb.com", Arrays.asList("user"));
         given(authService.authenticate(loginRequest)).willReturn(loginResponse);
         

@@ -53,7 +53,7 @@ public class AuthServiceTest {
    
     @Test
     public void givenValidCredentials_whenSignIn_thenUserIsLoggedIn() throws RoleNotFoundException, UserException, InvalidCredentialsException {
-    	LoginRequest loginRequest = new LoginRequest("user", "user123");    	
+    	LoginRequest loginRequest = new LoginRequest(0, "user", "user123");    	
         
         when(authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()))).thenReturn(authentication);
@@ -74,7 +74,7 @@ public class AuthServiceTest {
     
     @Test
     public void givenInvalidCredentials_whenSignIn_thenUserIsNotLoggedIn() {
-    	LoginRequest loginRequest = new LoginRequest("user", "user123");    	
+    	LoginRequest loginRequest = new LoginRequest(0, "user", "user123");    	
         
         when(authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()))).thenThrow(BadCredentialsException.class);

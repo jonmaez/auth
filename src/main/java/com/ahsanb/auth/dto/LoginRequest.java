@@ -20,6 +20,12 @@ public class LoginRequest {
 	public LoginRequest() {}
 	
 	@Valid
+    @ApiModelProperty(value = "Tenant ID for user")
+	@JsonProperty
+    @NotNull(message = "Tenant ID cannot be null")
+    private Integer tenantId;
+	
+	@Valid
     @ApiModelProperty(value = "Username of user")
 	@JsonProperty
     @NotNull(message = "Username cannot be null")
