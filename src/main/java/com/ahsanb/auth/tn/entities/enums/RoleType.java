@@ -1,4 +1,4 @@
-package com.ahsanb.auth.entities.enums;
+package com.ahsanb.auth.tn.entities.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;

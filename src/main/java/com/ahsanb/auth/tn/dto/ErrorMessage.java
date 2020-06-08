@@ -1,4 +1,4 @@
-package com.ahsanb.auth.dto;
+package com.ahsanb.auth.tn.dto;
 
 import javax.validation.constraints.NotNull;
 

@@ -1,11 +1,11 @@
-package com.ahsanb.auth.dao;
+package com.ahsanb.auth.tn.dao;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-import com.ahsanb.auth.entities.User;
+import com.ahsanb.auth.tn.entities.User;
 
 @RepositoryRestResource
 public interface UserRepository extends JpaRepository<User, Long> {

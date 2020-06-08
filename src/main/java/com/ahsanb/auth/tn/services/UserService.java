@@ -1,10 +1,10 @@
-package com.ahsanb.auth.services;
+package com.ahsanb.auth.tn.services;
 
-import com.ahsanb.auth.dto.ListUserResponse;
-import com.ahsanb.auth.dto.UserInfo;
 import com.ahsanb.auth.exceptions.RoleNotFoundException;
 import com.ahsanb.auth.exceptions.UserException;
 import com.ahsanb.auth.exceptions.UserNotFoundException;
+import com.ahsanb.auth.tn.dto.ListUserResponse;
+import com.ahsanb.auth.tn.dto.UserInfo;
 
 public interface UserService {
 

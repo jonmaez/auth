@@ -23,8 +23,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan(basePackages = { "com.ahsanb.auth.dao", "com.ahsanb.auth.entities" })
-@EnableJpaRepositories(basePackages = {"com.ahsanb.auth.dao", "com.ahsan.auth.services" },
+@ComponentScan(basePackages = { "com.ahsanb.auth.tn.dao", "com.ahsanb.auth.tn.entities" })
+@EnableJpaRepositories(basePackages = {"com.ahsanb.auth.tn.dao", "com.ahsan.auth.tn.services" },
         entityManagerFactoryRef = "tenantEntityManagerFactory",
         transactionManagerRef = "tenantTransactionManager")
 public class TenantDatabaseConfig {

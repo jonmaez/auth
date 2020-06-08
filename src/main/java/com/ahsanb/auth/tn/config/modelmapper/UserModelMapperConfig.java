@@ -1,11 +1,11 @@
-package com.ahsanb.auth.config.modelmapper;
+package com.ahsanb.auth.tn.config.modelmapper;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.ahsanb.auth.dto.UserInfo;
-import com.ahsanb.auth.entities.User;
+import com.ahsanb.auth.tn.dto.UserInfo;
+import com.ahsanb.auth.tn.entities.User;
 
 /**
  *  Configuration class which provides the model mapper beans for the below scenarios:

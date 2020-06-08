@@ -1,4 +1,4 @@
-package com.ahsanb.auth.t0.security;
+package com.ahsanb.auth.security;
 
 import java.util.HashMap;
 import java.util.Map;

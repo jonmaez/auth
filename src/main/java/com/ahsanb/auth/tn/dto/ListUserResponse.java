@@ -1,4 +1,4 @@
-package com.ahsanb.auth.dto;
+package com.ahsanb.auth.tn.dto;
 
 import java.util.List;
 

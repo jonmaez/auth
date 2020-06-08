@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.ahsanb.auth.dto.ErrorMessage;
+import com.ahsanb.auth.tn.dto.ErrorMessage;
 
 @RestControllerAdvice
 public class ControllerExceptionHandler {

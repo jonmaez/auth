@@ -7,8 +7,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ahsanb.auth.dao.UserRepository;
-import com.ahsanb.auth.entities.User;
+import com.ahsanb.auth.tn.dao.UserRepository;
+import com.ahsanb.auth.tn.entities.User;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

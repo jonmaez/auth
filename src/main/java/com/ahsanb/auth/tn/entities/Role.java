@@ -1,4 +1,4 @@
-package com.ahsanb.auth.entities;
+package com.ahsanb.auth.tn.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.ahsanb.auth.entities.enums.RoleType;
+import com.ahsanb.auth.tn.entities.enums.RoleType;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

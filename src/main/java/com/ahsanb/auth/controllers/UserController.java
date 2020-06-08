@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ahsanb.auth.dto.ListUserResponse;
-import com.ahsanb.auth.dto.UserInfo;
 import com.ahsanb.auth.exceptions.RoleNotFoundException;
 import com.ahsanb.auth.exceptions.UserException;
 import com.ahsanb.auth.exceptions.UserNotFoundException;
-import com.ahsanb.auth.services.UserService;
+import com.ahsanb.auth.tn.dto.ListUserResponse;
+import com.ahsanb.auth.tn.dto.UserInfo;
+import com.ahsanb.auth.tn.services.UserService;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

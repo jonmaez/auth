@@ -1,4 +1,4 @@
-package com.ahsanb.auth.services;
+package com.ahsanb.auth.tn.services;
 
 import java.util.HashSet;
 import java.util.List;
@@ -11,16 +11,16 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.ahsanb.auth.dao.RoleRepository;
-import com.ahsanb.auth.dao.UserRepository;
-import com.ahsanb.auth.dto.ListUserResponse;
-import com.ahsanb.auth.dto.UserInfo;
-import com.ahsanb.auth.entities.Role;
-import com.ahsanb.auth.entities.User;
-import com.ahsanb.auth.entities.enums.RoleType;
 import com.ahsanb.auth.exceptions.RoleNotFoundException;
 import com.ahsanb.auth.exceptions.UserException;
 import com.ahsanb.auth.exceptions.UserNotFoundException;
+import com.ahsanb.auth.tn.dao.RoleRepository;
+import com.ahsanb.auth.tn.dao.UserRepository;
+import com.ahsanb.auth.tn.dto.ListUserResponse;
+import com.ahsanb.auth.tn.dto.UserInfo;
+import com.ahsanb.auth.tn.entities.Role;
+import com.ahsanb.auth.tn.entities.User;
+import com.ahsanb.auth.tn.entities.enums.RoleType;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {

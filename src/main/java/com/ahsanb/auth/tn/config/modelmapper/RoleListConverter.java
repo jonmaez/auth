@@ -1,12 +1,12 @@
-package com.ahsanb.auth.config.modelmapper;
+package com.ahsanb.auth.tn.config.modelmapper;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.AbstractConverter;
 
-import com.ahsanb.auth.entities.Role;
-import com.ahsanb.auth.entities.enums.RoleType;
+import com.ahsanb.auth.tn.entities.Role;
+import com.ahsanb.auth.tn.entities.enums.RoleType;
 
 public class RoleListConverter extends AbstractConverter<Set<Role>, Set<RoleType>> {
 

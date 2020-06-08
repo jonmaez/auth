@@ -16,7 +16,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.ahsanb.auth.entities.enums.RoleType;
+import com.ahsanb.auth.tn.entities.Role;
+import com.ahsanb.auth.tn.entities.User;
+import com.ahsanb.auth.tn.entities.enums.RoleType;
 
 public class UserValidationTest {
 	

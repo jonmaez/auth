@@ -1,4 +1,4 @@
-package com.ahsanb.auth.dto;
+package com.ahsanb.auth.tn.dto;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.ahsanb.auth.entities.enums.RoleType;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
@@ -20,6 +20,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import com.ahsanb.auth.tn.entities.enums.RoleType;
 
 @Data
 @AllArgsConstructor

@@ -1,4 +1,4 @@
-package com.ahsanb.auth.entities;
+package com.ahsanb.auth.tn.entities;
 
 import java.util.Date;
 import java.util.HashSet;
