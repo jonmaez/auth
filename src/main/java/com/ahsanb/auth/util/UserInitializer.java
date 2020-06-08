@@ -11,11 +11,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.ahsanb.auth.dao.RoleRepository;
-import com.ahsanb.auth.dao.UserRepository;
-import com.ahsanb.auth.entities.Role;
-import com.ahsanb.auth.entities.User;
-import com.ahsanb.auth.entities.enums.RoleType;
+import com.ahsanb.auth.tenant.dao.RoleRepository;
+import com.ahsanb.auth.tenant.dao.UserRepository;
+import com.ahsanb.auth.tenant.entities.Role;
+import com.ahsanb.auth.tenant.entities.User;
+import com.ahsanb.auth.tenant.entities.enums.RoleType;
 
 @Component
 @ConditionalOnProperty(value = "users.initializer.enabled", havingValue = "true", matchIfMissing = false)

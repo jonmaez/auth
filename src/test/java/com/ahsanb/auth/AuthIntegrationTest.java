@@ -26,12 +26,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.ahsanb.auth.dao.RoleRepository;
-import com.ahsanb.auth.dao.UserRepository;
-import com.ahsanb.auth.dto.LoginRequest;
-import com.ahsanb.auth.entities.Role;
-import com.ahsanb.auth.entities.User;
-import com.ahsanb.auth.entities.enums.RoleType;
+import com.ahsanb.auth.tenant.dao.RoleRepository;
+import com.ahsanb.auth.tenant.dao.UserRepository;
+import com.ahsanb.auth.tenant.dto.LoginRequest;
+import com.ahsanb.auth.tenant.entities.Role;
+import com.ahsanb.auth.tenant.entities.User;
+import com.ahsanb.auth.tenant.entities.enums.RoleType;
 import com.ahsanb.auth.util.JsonUtil;
 
 @ExtendWith(SpringExtension.class)

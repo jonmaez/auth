@@ -18,9 +18,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.ahsanb.auth.entities.Role;
-import com.ahsanb.auth.entities.User;
-import com.ahsanb.auth.entities.enums.RoleType;
+import com.ahsanb.auth.tenant.dao.UserRepository;
+import com.ahsanb.auth.tenant.entities.Role;
+import com.ahsanb.auth.tenant.entities.User;
+import com.ahsanb.auth.tenant.entities.enums.RoleType;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest

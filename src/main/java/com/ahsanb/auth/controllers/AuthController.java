@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ahsanb.auth.dto.LoginRequest;
-import com.ahsanb.auth.dto.LoginResponse;
-import com.ahsanb.auth.exceptions.InvalidCredentialsException;
-import com.ahsanb.auth.services.AuthService;
+import com.ahsanb.auth.tenant.dto.LoginRequest;
+import com.ahsanb.auth.tenant.dto.LoginResponse;
+import com.ahsanb.auth.tenant.exceptions.InvalidCredentialsException;
+import com.ahsanb.auth.tenant.services.AuthService;
 
 import io.swagger.annotations.ApiOperation;
 

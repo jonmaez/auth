@@ -20,10 +20,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.ahsanb.auth.dto.LoginRequest;
-import com.ahsanb.auth.dto.LoginResponse;
-import com.ahsanb.auth.security.services.UserDetailsServiceImpl;
-import com.ahsanb.auth.services.AuthService;
+import com.ahsanb.auth.security.UserDetailsServiceImpl;
+import com.ahsanb.auth.tenant.dto.LoginRequest;
+import com.ahsanb.auth.tenant.dto.LoginResponse;
+import com.ahsanb.auth.tenant.services.AuthService;
 import com.ahsanb.auth.util.JsonUtil;
 
 @ExtendWith(SpringExtension.class)

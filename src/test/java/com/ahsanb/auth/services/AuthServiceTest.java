@@ -24,12 +24,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.ahsanb.auth.dto.LoginRequest;
-import com.ahsanb.auth.dto.LoginResponse;
-import com.ahsanb.auth.exceptions.InvalidCredentialsException;
-import com.ahsanb.auth.exceptions.RoleNotFoundException;
-import com.ahsanb.auth.exceptions.UserException;
-import com.ahsanb.auth.security.services.UserDetailsImpl;
+import com.ahsanb.auth.tenant.dto.LoginRequest;
+import com.ahsanb.auth.tenant.dto.LoginResponse;
+import com.ahsanb.auth.tenant.entities.UserDetailsImpl;
+import com.ahsanb.auth.tenant.exceptions.InvalidCredentialsException;
+import com.ahsanb.auth.tenant.exceptions.RoleNotFoundException;
+import com.ahsanb.auth.tenant.exceptions.UserException;
+import com.ahsanb.auth.tenant.services.AuthService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)

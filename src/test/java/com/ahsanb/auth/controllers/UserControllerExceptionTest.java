@@ -21,11 +21,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.ahsanb.auth.dto.UserInfo;
-import com.ahsanb.auth.exceptions.UserException;
-import com.ahsanb.auth.exceptions.UserNotFoundException;
-import com.ahsanb.auth.security.services.UserDetailsServiceImpl;
-import com.ahsanb.auth.services.UserService;
+import com.ahsanb.auth.security.UserDetailsServiceImpl;
+import com.ahsanb.auth.tenant.dto.UserInfo;
+import com.ahsanb.auth.tenant.exceptions.UserException;
+import com.ahsanb.auth.tenant.exceptions.UserNotFoundException;
+import com.ahsanb.auth.tenant.services.UserService;
 import com.ahsanb.auth.util.JsonUtil;
 
 @ExtendWith(SpringExtension.class)

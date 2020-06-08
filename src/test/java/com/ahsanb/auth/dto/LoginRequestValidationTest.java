@@ -13,6 +13,8 @@ import javax.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import com.ahsanb.auth.tenant.dto.LoginRequest;
+
 public class LoginRequestValidationTest {
 	
     private static Validator validator;

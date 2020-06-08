@@ -24,10 +24,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.ahsanb.auth.dto.ListUserResponse;
-import com.ahsanb.auth.dto.UserInfo;
-import com.ahsanb.auth.security.services.UserDetailsServiceImpl;
-import com.ahsanb.auth.services.UserService;
+import com.ahsanb.auth.security.UserDetailsServiceImpl;
+import com.ahsanb.auth.tenant.dto.ListUserResponse;
+import com.ahsanb.auth.tenant.dto.UserInfo;
+import com.ahsanb.auth.tenant.services.UserService;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(UserController.class)
