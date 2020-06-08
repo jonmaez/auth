@@ -51,7 +51,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = { "com.ahsanb.auth.master.entities",
-        "com.ahsanb.auth.master.repository" }, entityManagerFactoryRef = "masterEntityManagerFactory", transactionManagerRef = "masterTransactionManager")
+        "com.ahsanb.auth.master.dao" }, entityManagerFactoryRef = "masterEntityManagerFactory", transactionManagerRef = "masterTransactionManager")
 public class MasterDatabaseConfig {
 
     private static final Logger LOG = LoggerFactory
