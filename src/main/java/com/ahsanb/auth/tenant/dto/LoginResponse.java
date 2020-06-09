@@ -15,11 +15,11 @@ import lombok.Data;
 public class LoginResponse {
 	public LoginResponse() {}
 	
-	public LoginResponse(String accessToken, Long id, String username, String email, List<String> roles) {
+	public LoginResponse(String accessToken, Long id, String username, String tenant, List<String> roles) {
 		this.token = accessToken;
 		this.id = id;
 		this.username = username;
-		this.email = email;
+		this.tenant = tenant;
 		this.roles = roles;
 	}
 	
@@ -34,7 +34,7 @@ public class LoginResponse {
 
     @ApiModelProperty(value = "E-mail of user")
 	@JsonProperty
-	private String email;
+	private String tenant;
     
 
     @ApiModelProperty(value = "Set of roles assigned to user")

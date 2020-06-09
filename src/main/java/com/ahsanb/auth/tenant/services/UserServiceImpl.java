@@ -1,131 +1,96 @@
+/*
+ * Copyright 2018 onwards - Sunit Katkar (sunitkatkar@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ahsanb.auth.tenant.services;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.ahsanb.auth.tenant.dao.RoleRepository;
 import com.ahsanb.auth.tenant.dao.UserRepository;
-import com.ahsanb.auth.tenant.dto.ListUserResponse;
-import com.ahsanb.auth.tenant.dto.UserInfo;
-import com.ahsanb.auth.tenant.entities.Role;
 import com.ahsanb.auth.tenant.entities.User;
-import com.ahsanb.auth.tenant.entities.enums.RoleType;
-import com.ahsanb.auth.tenant.exceptions.RoleNotFoundException;
-import com.ahsanb.auth.tenant.exceptions.UserException;
-import com.ahsanb.auth.tenant.exceptions.UserNotFoundException;
 
-@Service("userService")
+/**
+ * Implementation of the {@link UserService} which accesses the {@link User}
+ * entity. This is the recommended way to access the entities through an
+ * interface rather than using the corresponding repository. This allows for
+ * separation into repository code and the service layer.
+ * 
+ * @author Sunit Katkar, sunitkatkar@gmail.com
+ *         (https://sunitkatkar.blogspot.com/)
+ * @since ver 1.0 (May 2018)
+ * @version 1.0
+ */
+@Service
 public class UserServiceImpl implements UserService {
 
-	@Autowired
-	UserRepository userRepository;
+    private static final Logger LOG = LoggerFactory
+            .getLogger(UserServiceImpl.class);
 
-	@Autowired
-	RoleRepository roleRepository;
-
-	@Autowired
-	PasswordEncoder encoder;
-	
     @Autowired
-    @Qualifier("UserRetriever")
-    private ModelMapper userRetriever;
-    
-	@Override
-	public UserInfo addUserInfo(UserInfo userInfo) throws UserException, RoleNotFoundException {
-		userInfo.setId(null);
-		if (userRepository.existsByUsername(userInfo.getUsername())) {
-	            throw new UserException(String.format("Username [%s] already in use", userInfo.getUsername()));
-			}
-		
-		if (userRepository.existsByEmail(userInfo.getEmail())) {
-            throw new UserException(String.format("E-mail [%s] already in use", userInfo.getEmail()));
-		}
+    private UserRepository userRepository;
 
-		// username can only be set on creation of user. Cannot be modified later.
-		User newUser = new User();
-		newUser.setUsername(userInfo.getUsername());
-		
-		return saveUserInfo(userInfo, newUser);
-	}
-		
-    private UserInfo saveUserInfo(UserInfo userInfo, User user) throws UserException {
-    	user.setId(userInfo.getId());
-    	user.setPassword(encoder.encode(userInfo.getPassword()));
-    	user.setEmail(userInfo.getEmail());
-    	
-    	Set<RoleType> roleTypes = userInfo.getRoles();
-    	
-    	if(roleTypes == null) {
-    		throw new UserException("Valid role(s) must be specified");
-    	}
-    	
-		Set<Role> roles = new HashSet<>(); 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-		for(RoleType role : roleTypes) {
-	    	if(role == null) {
-	    		throw new UserException("Valid role(s) must be specified");
-	    	}
-			Role roleFound = roleRepository.findByName(role)
-										   .orElseThrow(() -> new RoleNotFoundException(role.getRoleName()));
-			roles.add(roleFound);			
-		}
-		
-		user.setRoles(roles);
-		userRepository.save(user);
-
-		return userRetriever.map(user, UserInfo.class);
+    @Override
+    public User save(User user) {
+        // Encrypt the password
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User justSavedUser = userRepository.save(user);
+        LOG.info("User:" + justSavedUser.getUsername() + " saved.");
+        return justSavedUser;
     }
 
-	@Override
-	public UserInfo getUserInfoById(Long id) throws UserNotFoundException {
-		User user = userRepository.findById(id).orElse(null);
-        if (user == null) {
-        	throw new UserNotFoundException(id);
-        }  
-        return userRetriever.map(user, UserInfo.class);
-	}
-
-	@Override
-	public ListUserResponse getAllUserInfos() {
-		List<User> users = userRepository.findAll();	
-        List<UserInfo> userInfos = users.stream().
-        					map(user -> userRetriever.map(user, UserInfo.class))
-        					.collect(Collectors.toList());
-        
-		return new ListUserResponse(userInfos);
-	}
-
-	@Override
-	public UserInfo updateUserInfo(UserInfo userInfo, Long id) throws UserException {
-		userInfo.setId(id);
-		User user = userRepository.findById(id).orElse(null);
-        if (user == null) {
-        	throw new UserNotFoundException(id);
+    @Override
+    public String findLoggedInUsername() {
+        Object userDetails = SecurityContextHolder.getContext()
+                .getAuthentication().getDetails();
+        if (userDetails instanceof UserDetails) {
+            String username = ((UserDetails) userDetails).getUsername();
+            LOG.info("Logged in username:" + username);
+            return username;
         }
-               
-        User foundByEmail = userRepository.findByEmail(userInfo.getEmail()).orElse(null);
-        
-        if(foundByEmail != null && !foundByEmail.getId().equals(user.getId())) {
-            throw new UserException(String.format("E-mail [%s] already in use", userInfo.getEmail()));
-        }
-        
-        return saveUserInfo(userInfo, user);
-	}
+        return null;
+    }
 
-	@Override
-	public void deleteUser(Long id) {
-        User user = userRepository.findById(id).orElse(null);
-        if (user == null) {
-        	return;
+    @Override
+    public User findByUsernameAndTenantname(String username, String tenant) {
+        User user = userRepository.findByUsernameAndTenantname(username,
+                tenant);
+       if (user == null) {
+            throw new UsernameNotFoundException(
+                    String.format(
+                            "Username not found for domain, "
+                                    + "username=%s, tenant=%s",
+                            username, tenant));
         }
-        userRepository.delete(user);			
-	}
+        LOG.info("Found user with username:" + user.getUsername()
+                + " from tenant:" + user.getTenant());
+        return user;
+    }
+
+    @Override
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
+    }
 }

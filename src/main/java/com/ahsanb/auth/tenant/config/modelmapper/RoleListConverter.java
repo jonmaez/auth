@@ -6,15 +6,14 @@ import java.util.stream.Collectors;
 import org.modelmapper.AbstractConverter;
 
 import com.ahsanb.auth.tenant.entities.Role;
-import com.ahsanb.auth.tenant.entities.enums.RoleType;
 
-public class RoleListConverter extends AbstractConverter<Set<Role>, Set<RoleType>> {
+public class RoleListConverter extends AbstractConverter<Set<Role>, Set<String>> {
 
 	@Override
-	protected Set<RoleType> convert(Set<Role> source) {
+	protected Set<String> convert(Set<Role> source) {
         return source
                 .stream()
-                .map(Role::getName)
+                .map(Role::getRole)
                 .collect(Collectors.toSet());
 	}
 }

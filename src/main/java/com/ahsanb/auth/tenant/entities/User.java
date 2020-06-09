@@ -1,9 +1,25 @@
+/**
+ * Copyright 2018 onwards - Sunit Katkar (sunitkatkar@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.ahsanb.auth.tenant.entities;
 
-import java.util.Date;
-import java.util.HashSet;
+import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,70 +30,115 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
-@Data
-@AllArgsConstructor
-@Entity(name = "User")
-@Table(	name = "users", 
-		uniqueConstraints = { 
-			@UniqueConstraint(columnNames = "username"),
-			@UniqueConstraint(columnNames = "email") 
-		})
-public class User {
-	public User() {}
+/**
+ * User entity to represent a {@link User} of the system.
+ * 
+ * The JPA definitions of {@link User} and {@link Role} will cause the following
+ * 3 tables to be created:
+ * <ul>
+ * <li>user</li>
+ * <li>role</li>
+ * <li>user_roles</li>
+ * </ul>
+ * 
+ * @author Sunit Katkar, sunitkatkar@gmail.com
+ *         (https://sunitkatkar.blogspot.com/)
+ * @since ver 1.0 (May 2018)
+ * @version 1.0
+ */
+@Entity
+@Table(name = "user")
+public class User implements Serializable {
 
-	public User(String username, String password, String email, Set<Role> roles) {
-		this.username = username;
-		this.password = password;
-		this.email = email;
-		this.roles = roles;
-	}
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
-	private Long id;
+    private int id;
 
-    @NotNull(message = "Username cannot be null")
-    @Column(unique = true)
-    @NotBlank(message = "Username cannot be empty")
-    @Size(min = 3, max = 20)
-	private String username;
-   
-    @NotNull(message = "E-mail cannot be null")
-    @Column(unique = true)
-    @NotBlank(message = "E-mail cannot be empty")
-    @Size(min = 1, max = 50)
-	@Email(message = "E-mail must be valid")
-	private String email;
+    @Column(name = "username")
+    @NotNull(message = "*Please provide your username")
+    private String username;
 
-    @NotNull(message = "Password cannot be null")
-    @NotBlank(message = "Password cannot be empty")
-	private String password;
-    
-    @NotNull
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateAdded = new Date();
+    @Column(name = "password")
+    @Length(min = 5, message = "*Your password must have at least 5 characters")
+    @NotNull(message = "*Please provide your password")
+    private String password;
 
-    @NotNull(message = "Roles cannot be null")
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(	name = "user_roles", 
-				joinColumns = @JoinColumn(name = "user_id"), 
-				inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> roles = new HashSet<>();
-    
-    @Override
-    public String toString() {
-        return "User [id=" + id + ", username=" + username + ", email=" + email + ", roles=" + roles + ", dateAdded=" + dateAdded + "]";
+    /**
+     * Boolean flag to set if the user should be active when created in the User
+     * table
+     */
+    @Column(name = "active")
+    private boolean active;
+
+    /**
+     * Name of the tenant to which the user belongs
+     */
+    @Column(name = "tenant")
+    private String tenant;
+
+    /**
+     * Many-to-Many relation between a User and Role. A user can have many roles
+     * and vice versa
+     */
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
+
+    // Getters and setters
+
+    public int getId() {
+        return id;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public String getTenant() {
+        return tenant;
+    }
+
+    public void setTenant(String tenant) {
+        this.tenant = tenant;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
 }
