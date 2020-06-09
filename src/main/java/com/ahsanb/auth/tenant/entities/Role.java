@@ -18,7 +18,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Entity(name = "Role")
-@Table
+@Table(name = "roles")
 public class Role {
 	
 	public Role() {}
