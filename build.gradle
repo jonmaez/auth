@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '2.2.7.RELEASE'
+        springBootVersion = '2.2.6.RELEASE'
         springCloudVersion = 'Hoxton.RELEASE'    
         project.version = '0.0.1'
     	jarname = 'auth'
