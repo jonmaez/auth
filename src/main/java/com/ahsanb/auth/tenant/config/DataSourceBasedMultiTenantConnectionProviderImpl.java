@@ -27,115 +27,110 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.ahsanb.auth.master.dao.MasterTenantRepository;
 import com.ahsanb.auth.master.entities.MasterTenant;
-import com.ahsanb.auth.tenant.entities.UserDetailsImpl;
 import com.ahsanb.auth.util.DataSourceUtil;
 import com.ahsanb.auth.util.TenantContextHolder;
 
 /**
- * This class does the job of selecting the correct database based on the tenant id found by the
- * {@link CurrentTenantIdentifierResolverImpl}
+ * This class does the job of selecting the correct database based on the tenant
+ * id found by the {@link CurrentTenantIdentifierResolverImpl}
  * 
- * @author Sunit Katkar, sunitkatkar@gmail.com (https://sunitkatkar.blogspot.com/)
+ * @author Sunit Katkar, sunitkatkar@gmail.com
+ *         (https://sunitkatkar.blogspot.com/)
  * @since ver 1.0 (May 2018)
  * @version 1.0
  *
  */
 @Configuration
 public class DataSourceBasedMultiTenantConnectionProviderImpl
-        extends AbstractDataSourceBasedMultiTenantConnectionProviderImpl {
+		extends AbstractDataSourceBasedMultiTenantConnectionProviderImpl {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DataSourceBasedMultiTenantConnectionProviderImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DataSourceBasedMultiTenantConnectionProviderImpl.class);
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Injected MasterTenantRepository to access the tenant information from the master_tenant table
-     */
-    @Autowired
-    private MasterTenantRepository masterTenantRepo;
-    
-    @Autowired
-    ApplicationContext applicationContext;
+	/**
+	 * Injected MasterTenantRepository to access the tenant information from the
+	 * master_tenant table
+	 */
+	@Autowired
+	private MasterTenantRepository masterTenantRepo;
 
-    /**
-     * Map to store the tenant ids as key and the data source as the value
-     */
-    private Map<String, DataSource> dataSourcesMtApp = new TreeMap<>();
+	@Autowired
+	ApplicationContext applicationContext;
 
-    @Override
-    protected DataSource selectAnyDataSource() {
-        // This method is called more than once. So check if the data source map
-        // is empty. If it is then rescan master_tenant table for all tenant
-        // entries.
-        if (dataSourcesMtApp.isEmpty()) {
-            List<MasterTenant> masterTenants = masterTenantRepo.findAll();
-            LOG.info(">>>> selectAnyDataSource() -- Total tenants:" + masterTenants.size());
-            for (MasterTenant masterTenant : masterTenants) {
-                dataSourcesMtApp.put(masterTenant.getTenantId(),
-                        DataSourceUtil.createAndConfigureDataSource(masterTenant));
-            }
-        }
-        return this.dataSourcesMtApp.values().iterator().next();
-    }
+	/**
+	 * Map to store the tenant ids as key and the data source as the value
+	 */
+	private Map<String, DataSource> dataSourcesMtApp = new TreeMap<>();
 
-    @Override
-    protected DataSource selectDataSource(String tenantIdentifier) {
-        // If the requested tenant id is not present check for it in the master
-        // database 'master_tenant' table
+	@Override
+	protected DataSource selectAnyDataSource() {
+		// This method is called more than once. So check if the data source map
+		// is empty. If it is then rescan master_tenant table for all tenant
+		// entries.
+		if (dataSourcesMtApp.isEmpty()) {
+			List<MasterTenant> masterTenants = masterTenantRepo.findAll();
+			LOG.info(">>>> selectAnyDataSource() -- Total tenants:" + masterTenants.size());
+			for (MasterTenant masterTenant : masterTenants) {
+				dataSourcesMtApp.put(masterTenant.getTenantId(),
+						DataSourceUtil.createAndConfigureDataSource(masterTenant));
+			}
+		}
+		return this.dataSourcesMtApp.values().iterator().next();
+	}
 
-        tenantIdentifier = initializeTenantIfLost(tenantIdentifier);
+	@Override
+	protected DataSource selectDataSource(String tenantIdentifier) {
+		// If the requested tenant id is not present check for it in the master
+		// database 'master_tenant' table
 
-        if (!this.dataSourcesMtApp.containsKey(tenantIdentifier)) {
-            List<MasterTenant> masterTenants = masterTenantRepo.findAll();
-            LOG.info(
-                    ">>>> selectDataSource() -- tenant:" + tenantIdentifier + " Total tenants:" + masterTenants.size());
-            for (MasterTenant masterTenant : masterTenants) {
-                dataSourcesMtApp.put(masterTenant.getTenantId(),
-                        DataSourceUtil.createAndConfigureDataSource(masterTenant));
-            }
-        }
-            //check again if tenant exist in map after rescan master_db, if not, throw UsernameNotFoundException
-                    if (!this.dataSourcesMtApp.containsKey(tenantIdentifier)) {
-            LOG.warn("Trying to get tenant:" + tenantIdentifier + " which was not found in master db after rescan");
-            throw new UsernameNotFoundException(
-                    String.format(
-                            "Tenant not found after rescan, "
-                                    + " tenant=%s",
-                             tenantIdentifier));
-        }
-        return this.dataSourcesMtApp.get(tenantIdentifier);
-    }
+		tenantIdentifier = initializeTenantIfLost(tenantIdentifier);
 
-    /**
-     * Initialize tenantId based on the logged in user if the tenant Id got lost in after form submission in a user
-     * session.
-     * 
-     * @param tenantIdentifier
-     * @return tenantIdentifier
-     */
-    private String initializeTenantIfLost(String tenantIdentifier) {
-        /*if (TenantContextHolder.getTenant() == null) {
+		if (!this.dataSourcesMtApp.containsKey(tenantIdentifier)) {
+			List<MasterTenant> masterTenants = masterTenantRepo.findAll();
+			LOG.info(
+					">>>> selectDataSource() -- tenant:" + tenantIdentifier + " Total tenants:" + masterTenants.size());
+			for (MasterTenant masterTenant : masterTenants) {
+				dataSourcesMtApp.put(masterTenant.getTenantId(),
+						DataSourceUtil.createAndConfigureDataSource(masterTenant));
+			}
+		}
+		// check again if tenant exist in map after rescan master_db, if not, throw
+		// UsernameNotFoundException
+		if (!this.dataSourcesMtApp.containsKey(tenantIdentifier)) {
+			LOG.warn("Trying to get tenant:" + tenantIdentifier + " which was not found in master db after rescan");
+			throw new UsernameNotFoundException(
+					String.format("Tenant not found after rescan, " + " tenant=%s", tenantIdentifier));
+		}
+		return this.dataSourcesMtApp.get(tenantIdentifier);
+	}
 
-            SecurityContext securityContext = SecurityContextHolder.getContext();
-            Authentication authentication = securityContext.getAuthentication();
-            UserDetailsImpl userDetails = null;
-            if (authentication != null) {
-                Object principal = authentication.getPrincipal();
-                userDetails = principal instanceof UserDetailsImpl ? (UserDetailsImpl) principal : null;
-            }
-            TenantContextHolder.setTenantId(userDetails.getTenant());
-        }*/
+	/**
+	 * Initialize tenantId based on the logged in user if the tenant Id got lost in
+	 * after form submission in a user session.
+	 * 
+	 * @param tenantIdentifier
+	 * @return tenantIdentifier
+	 */
+	private String initializeTenantIfLost(String tenantIdentifier) {
+		/*
+		 * if (TenantContextHolder.getTenant() == null) {
+		 * 
+		 * SecurityContext securityContext = SecurityContextHolder.getContext();
+		 * Authentication authentication = securityContext.getAuthentication();
+		 * UserDetailsImpl userDetails = null; if (authentication != null) { Object
+		 * principal = authentication.getPrincipal(); userDetails = principal instanceof
+		 * UserDetailsImpl ? (UserDetailsImpl) principal : null; }
+		 * TenantContextHolder.setTenantId(userDetails.getTenant()); }
+		 */
 
-        if (tenantIdentifier != TenantContextHolder.getTenant()) {
-            tenantIdentifier = TenantContextHolder.getTenant();
-        }
-        return tenantIdentifier;
-    }
+		if (tenantIdentifier != TenantContextHolder.getTenant()) {
+			tenantIdentifier = TenantContextHolder.getTenant();
+		}
+		return tenantIdentifier;
+	}
 }

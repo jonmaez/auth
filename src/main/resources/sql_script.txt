@@ -12,6 +12,7 @@ CREATE TABLE  `masterdb`.`master_tenant` (
 ) ENGINE=InnoDB;
 
 INSERT INTO master_tenant VALUES (1, 'tenant_1', 'jdbc:mysql://localhost:3306/dbtenant1?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC', 'root', '!Munizasan786!', 0, 1, 'com.mysql.cj.jdbc.Driver');
+INSERT INTO master_tenant VALUES (2, 'parknsak', 'jdbc:mysql://localhost:3306/dbtenant2?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC', 'root', '!Munizasan786!', 0, 1, 'com.mysql.cj.jdbc.Driver');
 
 # Tenant 1 DB (MySql)
 create database dbtenant1;
@@ -30,6 +31,8 @@ ENGINE=MyISAM
 ;
 
 INSERT INTO users VALUES (1, 1, now(), 'ahsanb@ahsanb.com', '$2a$10$RUgfq45623hX0qORdFka4eDXf6JqFcDxAP/WQPtvfJwnW2wupox8e', 'ahsanb');
+INSERT INTO users VALUES (2, 1, now(), 'karimb@ahsanb.com', '$2a$10$RUgfq45623hX0qORdFka4eDXf6JqFcDxAP/WQPtvfJwnW2wupox8e', 'karimb');
+INSERT INTO users VALUES (3, 1, now(), 'munizab@ahsanb.com', '$2a$10$RUgfq45623hX0qORdFka4eDXf6JqFcDxAP/WQPtvfJwnW2wupox8e', 'munizab');
 
 DROP TABLE IF EXISTS `dbtenant1`.`role`;
 CREATE TABLE `roles` (
@@ -41,7 +44,9 @@ COLLATE='latin1_swedish_ci'
 ENGINE=MyISAM
 ;
 
-INSERT INTO roles VALUES (1, 'admin');
+INSERT INTO roles VALUES (1, 'ROLE_ADMIN');
+INSERT INTO roles VALUES (2, 'ROLE_USER');
+INSERT INTO roles VALUES (3, 'ROLE_MODERATOR');
 
 # Tenant 2 DB (Postgres)
 DROP TABLE IF EXISTS `dbtenant1`.`user_role`;
@@ -56,5 +61,7 @@ ENGINE=MyISAM
 ;
 
 INSERT INTO user_role VALUES (1, 1);
+INSERT INTO user_role VALUES (2, 2);
+INSERT INTO user_role VALUES (3, 3);
 
 
