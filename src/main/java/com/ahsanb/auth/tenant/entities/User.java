@@ -29,7 +29,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Entity(name = "User")
 @Table(	name = "users", 
-		uniqueConstraints = { 
+		uniqueConstraints = {
 			@UniqueConstraint(columnNames = "username"),
 			@UniqueConstraint(columnNames = "email") 
 		})
@@ -47,15 +47,21 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
 	private Long id;
-
+	
+    /*@NotNull(message = "Tenant cannot be null")
+    @Column(name = "tenant")
+    @NotBlank(message = "Tenant cannot be empty")
+    @Size(min = 3, max = 20)
+    private String tenant = "master";*/
+    
     @NotNull(message = "Username cannot be null")
-    @Column(unique = true)
+    @Column(name = "username", unique = true)
     @NotBlank(message = "Username cannot be empty")
     @Size(min = 3, max = 20)
 	private String username;
    
     @NotNull(message = "E-mail cannot be null")
-    @Column(unique = true)
+    @Column(name= "email", unique = true)
     @NotBlank(message = "E-mail cannot be empty")
     @Size(min = 1, max = 50)
 	@Email(message = "E-mail must be valid")
@@ -63,15 +69,21 @@ public class User {
 
     @NotNull(message = "Password cannot be null")
     @NotBlank(message = "Password cannot be empty")
+    @Column(name = "password")
 	private String password;
     
     @NotNull
+    @Column(name = "active")
+    private boolean active = true;
+    
+    @NotNull
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "date_added")
     private Date dateAdded = new Date();
 
     @NotNull(message = "Roles cannot be null")
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(	name = "user_roles", 
+	@JoinTable(	name = "user_role", 
 				joinColumns = @JoinColumn(name = "user_id"), 
 				inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();

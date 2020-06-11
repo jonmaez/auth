@@ -22,6 +22,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -63,6 +64,10 @@ public class MasterTenant {
     @Column(name = "password")
     private String password;
 
+    @Size(max = 100)
+    @Column(name = "driver_class",nullable = false)
+    private String driverClass;
+    
     /**
      * Specifies the version field or property of an entity class that serves as
      * its optimistic lock value. The version is used to ensure integrity when
@@ -71,6 +76,11 @@ public class MasterTenant {
     @Version
     private int version = 0;
 
+    
+    @NotNull
+    @Column(name = "active")
+    private boolean active = true;
+    
     /**
      * @return the id
      */
@@ -146,18 +156,39 @@ public class MasterTenant {
         this.password = password;
     }
 
+    public String getDriverClass() {
+        return driverClass;
+    }
+
+    public MasterTenant setDriverClass(String driverClass) {
+        this.driverClass = driverClass;
+        return this;
+    }
+    
     /**
      * @return the version
      */
     public int getVersion() {
         return version;
     }
-
+    
     /**
      * @param version
      *            the version to set
      */
     public void setVersion(int version) {
         this.version = version;
+    }
+    
+    /**
+     * @param active
+     *            the active to set
+     */
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+    
+    public boolean isActive() {
+        return active;
     }
 }

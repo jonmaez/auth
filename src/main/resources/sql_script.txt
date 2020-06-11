@@ -1,0 +1,60 @@
+
+# Master DB
+create database masterdb;
+CREATE TABLE  `masterdb`.`master_tenant` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `tenant_id` varchar(50) NOT NULL,
+  `url` varchar(100) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `version` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB;
+
+INSERT INTO master_tenant VALUES (1, 'tenant_1', 'jdbc:mysql://localhost:3306/dbtenant1?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC', 'root', '!Munizasan786!', 0, 1, 'com.mysql.cj.jdbc.Driver');
+
+# Tenant 1 DB (MySql)
+create database dbtenant1;
+
+DROP TABLE IF EXISTS `dbtenant1`.`user`;
+CREATE TABLE `users` (
+ `user_id` INT(11) NOT NULL,
+ `password` VARCHAR(255) NOT NULL,
+ `username` VARCHAR(255) NOT NULL,
+ `active` BIT(1) NULL DEFAULT NULL,
+ `tenant` VARCHAR(255) NULL DEFAULT NULL,
+ PRIMARY KEY (`user_id`)
+)
+COLLATE='latin1_swedish_ci'
+ENGINE=MyISAM
+;
+
+INSERT INTO users VALUES (1, 1, now(), 'ahsanb@ahsanb.com', '$2a$10$RUgfq45623hX0qORdFka4eDXf6JqFcDxAP/WQPtvfJwnW2wupox8e', 'ahsanb');
+
+DROP TABLE IF EXISTS `dbtenant1`.`role`;
+CREATE TABLE `roles` (
+ `role_id` INT(11) NOT NULL,
+ `role` VARCHAR(255) NULL DEFAULT NULL,
+ PRIMARY KEY (`role_id`)
+)
+COLLATE='latin1_swedish_ci'
+ENGINE=MyISAM
+;
+
+INSERT INTO roles VALUES (1, 'admin');
+
+# Tenant 2 DB (Postgres)
+DROP TABLE IF EXISTS `dbtenant1`.`user_role`;
+CREATE TABLE `user_role` (
+ `user_id` INT(11) NOT NULL,
+ `role_id` INT(11) NOT NULL,
+ PRIMARY KEY (`user_id`, `role_id`),
+ INDEX `FKa68196081fvovjhkek5m97n3y` (`role_id`)
+)
+COLLATE='latin1_swedish_ci'
+ENGINE=MyISAM
+;
+
+INSERT INTO user_role VALUES (1, 1);
+
+

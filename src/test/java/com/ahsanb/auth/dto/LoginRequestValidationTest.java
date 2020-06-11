@@ -27,14 +27,14 @@ public class LoginRequestValidationTest {
     
     @Test
     public void testValidLoginRequest() {
-        LoginRequest loginRequest = new LoginRequest("admin", "admin123");
+        LoginRequest loginRequest = new LoginRequest("master", "admin", "admin123");
         Set<ConstraintViolation<LoginRequest>> violations = validator.validate(loginRequest);
         assertTrue(violations.isEmpty());
     }
     
     @Test
     public void testEmptyUsername() {
-        LoginRequest loginRequest = new LoginRequest("", "admin123");
+        LoginRequest loginRequest = new LoginRequest("master", "", "admin123");
         Set<ConstraintViolation<LoginRequest>> violations = validator.validate(loginRequest);
         assertFalse(violations.isEmpty());
         assertTrue(violations.toString().contains("size must be between 3 and 20"));
@@ -42,7 +42,7 @@ public class LoginRequestValidationTest {
 
     @Test
     public void testNullUsername() {
-        LoginRequest loginRequest = new LoginRequest(null, "admin123");
+        LoginRequest loginRequest = new LoginRequest("master", null, "admin123");
         Set<ConstraintViolation<LoginRequest>> violations = validator.validate(loginRequest);
         assertFalse(violations.isEmpty());
         assertTrue(violations.toString().contains("Username cannot be null"));
@@ -50,7 +50,7 @@ public class LoginRequestValidationTest {
     
     @Test
     public void testVeryLongUsername() {
-        LoginRequest loginRequest = new LoginRequest("INVALIDINVALIDINVALIDINVALIDINVALID", "admin123");
+        LoginRequest loginRequest = new LoginRequest("master", "INVALIDINVALIDINVALIDINVALIDINVALID", "admin123");
         Set<ConstraintViolation<LoginRequest>> violations = validator.validate(loginRequest);
         assertFalse(violations.isEmpty());
         assertTrue(violations.toString().contains("size must be between 3 and 20"));
@@ -58,7 +58,7 @@ public class LoginRequestValidationTest {
     
     @Test
     public void testEmptyPassword() {
-        LoginRequest loginRequest = new LoginRequest("admin", "");
+        LoginRequest loginRequest = new LoginRequest("master", "admin", "");
         Set<ConstraintViolation<LoginRequest>> violations = validator.validate(loginRequest);
         assertFalse(violations.isEmpty());
         assertTrue(violations.toString().contains("Password cannot be empty"));
@@ -66,7 +66,7 @@ public class LoginRequestValidationTest {
 
     @Test
     public void testNullPassword() {
-        LoginRequest loginRequest = new LoginRequest("admin", null);
+        LoginRequest loginRequest = new LoginRequest("master", "admin", null);
         Set<ConstraintViolation<LoginRequest>> violations = validator.validate(loginRequest);
         assertFalse(violations.isEmpty());
         assertTrue(violations.toString().contains("Password cannot be null"));
@@ -74,7 +74,7 @@ public class LoginRequestValidationTest {
     
     @Test
     public void testVeryLongPassword() {
-        LoginRequest loginRequest = new LoginRequest("admin", "INVALIDINVALIDINVALIDINVALIDINVALIDINVALIDINVALIDINVALID");
+        LoginRequest loginRequest = new LoginRequest("master", "admin", "INVALIDINVALIDINVALIDINVALIDINVALIDINVALIDINVALIDINVALID");
         Set<ConstraintViolation<LoginRequest>> violations = validator.validate(loginRequest);
         assertFalse(violations.isEmpty());
         assertTrue(violations.toString().contains("size must be between 1 and 50"));

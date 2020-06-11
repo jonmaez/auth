@@ -20,6 +20,14 @@ public class LoginRequest {
 	public LoginRequest() {}
 	
 	@Valid
+    @ApiModelProperty(value = "Account name")
+	@JsonProperty("account")
+    @NotNull(message = "Account name cannot be null")
+    @NotBlank(message = "Account name cannot be empty")
+    @Size(min = 3, max = 20)
+	private String tenantId;
+	
+	@Valid
     @ApiModelProperty(value = "Username of user")
 	@JsonProperty
     @NotNull(message = "Username cannot be null")

@@ -68,7 +68,7 @@ public class AuthIntegrationTest {
     public void givenUser_whenLogin_thenSuccessfulLogin() throws Exception {
     	Role adminRole = createTestRole(RoleType.ROLE_ADMIN);   	
         User adminUser = createTestUser("admin", "admin", "admin@ahsanb.com", adminRole);
-    	LoginRequest loginRequest = new LoginRequest("admin", "admin");
+    	LoginRequest loginRequest = new LoginRequest("master", "admin", "admin");
 
         mvc.perform(post(ROOT_URI + "/signin")
            .contentType(MediaType.APPLICATION_JSON)

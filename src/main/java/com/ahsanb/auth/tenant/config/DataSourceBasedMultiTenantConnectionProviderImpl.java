@@ -25,7 +25,7 @@ import org.hibernate.engine.jdbc.connections.spi.AbstractDataSourceBasedMultiTen
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -60,6 +60,9 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl
      */
     @Autowired
     private MasterTenantRepository masterTenantRepo;
+    
+    @Autowired
+    ApplicationContext applicationContext;
 
     /**
      * Map to store the tenant ids as key and the data source as the value
@@ -118,17 +121,17 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl
      * @return tenantIdentifier
      */
     private String initializeTenantIfLost(String tenantIdentifier) {
-        if (TenantContextHolder.getTenant() == null) {
+        /*if (TenantContextHolder.getTenant() == null) {
 
             SecurityContext securityContext = SecurityContextHolder.getContext();
             Authentication authentication = securityContext.getAuthentication();
-            UserDetailsImpl customUserDetails = null;
+            UserDetailsImpl userDetails = null;
             if (authentication != null) {
                 Object principal = authentication.getPrincipal();
-                customUserDetails = principal instanceof UserDetailsImpl ? (UserDetailsImpl) principal : null;
+                userDetails = principal instanceof UserDetailsImpl ? (UserDetailsImpl) principal : null;
             }
-            //TenantContextHolder.setTenantId(customUserDetails.getTenant());
-        }
+            TenantContextHolder.setTenantId(userDetails.getTenant());
+        }*/
 
         if (tenantIdentifier != TenantContextHolder.getTenant()) {
             tenantIdentifier = TenantContextHolder.getTenant();

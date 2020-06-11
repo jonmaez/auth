@@ -41,7 +41,7 @@ public class AuthControllerExceptionTest {
     
     @Test
     public void testUserCredentialsExceptionOnGet() throws Exception {
-    	LoginRequest loginRequest = new LoginRequest("user", "user123");
+    	LoginRequest loginRequest = new LoginRequest("master", "user", "user123");
         given(authService.authenticate(loginRequest))
 		   .willThrow(new InvalidCredentialsException("Invalid Credentials!"));
         
