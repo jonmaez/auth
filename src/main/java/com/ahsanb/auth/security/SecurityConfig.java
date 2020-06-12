@@ -12,8 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.ahsanb.auth.security.UserDetailsServiceImpl;
-
 @EnableWebSecurity
 @Configuration
 @ConditionalOnProperty(value = "rbac.enabled", havingValue = "false", matchIfMissing = true)
