@@ -6,30 +6,37 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.ApplicationScope;
 
 import com.ahsanb.auth.tenant.dto.LoginRequest;
 import com.ahsanb.auth.tenant.dto.LoginResponse;
 import com.ahsanb.auth.tenant.entities.UserDetailsImpl;
 import com.ahsanb.auth.tenant.exceptions.InvalidCredentialsException;
-import com.ahsanb.auth.util.JwtTokenUtil;
+import com.ahsanb.auth.util.CustomJwtTokenUtil;
+import com.ahsanb.tenantlib.master.entities.MasterTenant;
+import com.ahsanb.tenantlib.master.services.MasterTenantService;
+import com.ahsanb.tenantlib.security.UserTenantInformation;
+import com.ahsanb.tenantlib.util.TenantContextHolder;
 
 @Service("authService")
+//@ComponentScan("com.ahsanb")
 public class AuthServiceImpl implements AuthService {
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;
 	
 	@Autowired
-	private JwtTokenUtil jwtTokenUtil;
+	private CustomJwtTokenUtil jwtTokenUtil;
 	
-    //@Autowired
-    //MasterTenantService masterTenantService;
+    @Autowired
+    MasterTenantService masterTenantService;
     
     private Map<String, String> mapValue = new HashMap<>();
     private Map<String, String> userDbMap = new HashMap<>();
@@ -37,13 +44,13 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public LoginResponse authenticate(LoginRequest loginRequest) throws InvalidCredentialsException {
         // Set database parameter
-        /*MasterTenant masterTenant = masterTenantService.findByTenantId(loginRequest.getTenantId());
+        MasterTenant masterTenant = masterTenantService.findByTenantId(loginRequest.getTenantId());
         if(masterTenant == null || !masterTenant.isActive()){
             throw new InvalidCredentialsException("Invalid credentials!");
         }
-        s
+        
         //Entry Client Wise value dbName store into bean.
-        loadCurrentDatabaseInstance(masterTenant.getTenantId(), loginRequest.getUsername());*/
+        loadCurrentDatabaseInstance(masterTenant.getTenantId(), loginRequest.getUsername());
  
 		Authentication authentication = null;
 		try {
@@ -58,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
         
 		String token = jwtTokenUtil.generateToken(loginRequest.getTenantId(), authentication);
 		
-		//setMetaDataAfterLogin();
+		setMetaDataAfterLogin();
 				
 		List<String> roles = userDetails.getAuthorities().stream()
 														 .map(item -> item.getAuthority())
@@ -67,12 +74,12 @@ public class AuthServiceImpl implements AuthService {
 		return new LoginResponse(token, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles);
 	}
 
-    /*private void loadCurrentDatabaseInstance(String tenantId, String userName) {
+    private void loadCurrentDatabaseInstance(String tenantId, String userName) {
         TenantContextHolder.setTenantId(tenantId);
         mapValue.put(userName, tenantId);
-    }*/
+    }
 
-    /*@Bean(name = "userTenantInfo")
+    @Bean(name = "userTenantInfo")
     @ApplicationScope
     public UserTenantInformation setMetaDataAfterLogin() {
         UserTenantInformation tenantInformation = new UserTenantInformation();
@@ -89,5 +96,5 @@ public class AuthServiceImpl implements AuthService {
         }
         tenantInformation.setMap(userDbMap);
         return tenantInformation;
-    }*/
+    }
 }

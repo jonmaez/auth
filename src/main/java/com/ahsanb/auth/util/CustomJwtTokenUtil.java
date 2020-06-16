@@ -20,7 +20,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
  * @author Md. Amran Hossain
  */
 @Component
-public class JwtTokenUtil implements Serializable {
+public class CustomJwtTokenUtil implements Serializable {
 
     private static final long serialVersionUID = -2550185165626007488L;
 

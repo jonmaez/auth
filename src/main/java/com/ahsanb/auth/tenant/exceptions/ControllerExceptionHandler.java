@@ -80,7 +80,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorMessage handleInternalException(Exception ex) {
-        logger.debug("Internal Server Error", ex);
+        logger.info("Internal Server Error", ex);
         return getErrorResponse("Internal Server Error");
     }
 
